@@ -223,6 +223,7 @@ bool DisksApp::processQueryText(const String & text)
         {
             int code = err.code();
             error_string = getExceptionMessage(err, true, false);
+            err.markAsLogged();
             if (code == ErrorCodes::BAD_ARGUMENTS)
             {
                 if (command.get())
@@ -602,9 +603,10 @@ int mainEntryClickHouseDisks(int argc, char ** argv)
         app.init(common_arguments);
         return app.run();
     }
-    catch (const DB::Exception & e)
+    catch (DB::Exception & e)
     {
         std::cerr << DB::getExceptionMessage(e, false) << std::endl;
+        e.markAsLogged();
         auto code = DB::getCurrentExceptionCode();
         return static_cast<UInt8>(code) ? code : 1;
     }

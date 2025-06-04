@@ -462,9 +462,10 @@ int mainEntryClickHouseKeeperClient(int argc, char ** argv)
         client.init(argc, argv);
         return client.run();
     }
-    catch (const DB::Exception & e)
+    catch (DB::Exception & e)
     {
         std::cerr << DB::getExceptionMessage(e, false) << std::endl;
+        e.markAsLogged();
         auto code = DB::getCurrentExceptionCode();
         return static_cast<UInt8>(code) ? code : 1;
     }
